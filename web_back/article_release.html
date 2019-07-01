@@ -15,6 +15,7 @@
     <script src="js/jedate/js/jedate.js"></script>
     <script src="js/tinymce/js/tinymce/tinymce.min.js"></script>
     <script src="js/tinymce/js/tinymce_setup.js"></script>
+    <script src="./js/moment.js"></script>
 </head>
 
 <body>
@@ -33,6 +34,7 @@
                 <div class="form-group">
                     <label for="inputPassword3" class="col-sm-2 control-label">文章封面：</label>
                     <div class="col-sm-10">
+                        <img src="" alt="" style="height: 100px">
                         <input type="file" id="exampleInputFile">
                     </div>
                 </div>
@@ -79,6 +81,62 @@
             </form>
         </div>
     </div>
+    <script src="./js/template-web.js"></script>
+    <script id="leibie" type="text/html">
+    {{each data v}}
+    <option value="{{v.id}}">{{v.name}}</option>
+    {{/each}}
+    </script>
+    <script>
+        //     文章新增-图片预览
+        $('#exampleInputFile').on('change', function () {
+            var aa = this.files[0];
+            var url = URL.createObjectURL(aa);
+            $(this).prev().attr('src', url);
+        });
+
+        // 文章新增-文章类别数据获取
+        // 1.一进来文章新增页面就发送ajax请求.获取到所有的文章类别数据
+        // 2.使用模板引擎渲染, 注意的是需要id, 就要使用value属性来放id
+        $.ajax({
+            url: 'http://localhost:8000/admin/category_search',
+            success: function (backData) {
+                // console.log(backData);
+                if (backData.code == 200) {
+                    //使用模板渲染
+                    var resHtml = template('leibie', backData);
+                    $('.form-control').html(resHtml);
+                }
+            }
+        });
+
+        // jedate日期选择插件
+        // 去github中搜索jeDate,点赞最多的就是.   https://github.com/singod/jeDate
+        // github中的介绍不是很多, 可以点进去他的官网看文档: http://www.jemui.com/uidoc/jedate.html
+        // 去官网下载插件文件,导入
+        // 写结构,调用方法.
+
+        // momentjs插件
+        // 日期格式化的插件.
+        // 去github中搜索moment,点赞最多的就是 https://github.com/search?q=moment
+        // 官网文档:  http://momentjs.cn/
+
+        var dateNowStr = moment().format('YYYY-MM-DD'); //当前时间格式化
+        $('#dateinput').val(dateNowStr);
+
+//         给发布按钮一个点击事件,
+
+// 注意阻止默认跳转
+
+// 获取formData数据
+
+// 检查form表单里面需要发送数据的标签是否都带有name属性.
+
+// 富文本编辑器里面的内容获取不到,追加到formData里面去.     文本域有name要去掉name.
+
+// 发送ajax请求
+
+    </script>
 
 </body>
 
